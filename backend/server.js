@@ -1,1 +1,62 @@
-const express = require("express")
+require('dotenv').config();
+const express = require('express');
+const mongoose = require('mongoose');
+const winston = require('winston');
+const expressWinston = require('express-winston');
+
+const app = express();
+
+// Logger
+const logger = winston.createLogger({
+  transports: [new winston.transports.Console()],
+});
+
+const { MONGODB_URI } = process.env;
+
+mongoose.connect(MONGODB_URI).catch((error) => {
+  logger.log({
+    message: `MongoDB error: ${error}`,
+    level: 'error',
+  });
+});
+
+const db = mongoose.connection;
+
+// DB connection logging
+db.on('error', (error) => {
+  logger.log({
+    message: `MongoDB error: ${error}`,
+    level: 'error',
+  });
+});
+
+db.once('open', () => {
+  logger.log({
+    message: 'Connected to MongoDB',
+    level: 'info',
+  });
+});
+
+// Middleware
+app.use(express.json());
+app.use(
+  expressWinston.logger({
+    transports: [new winston.transports.Console()],
+    format: winston.format.combine(
+      winston.format.colorize(),
+      winston.format.json(),
+    ),
+  }),
+);
+
+// Routes
+// app.use("/api/users", require("./routes/api/users"));
+
+const PORT = 5000;
+
+app.listen(PORT, () => {
+  logger.log({
+    message: `Listening on port ${PORT}`,
+    level: 'info',
+  });
+});
