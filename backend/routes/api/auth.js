@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { body, validationResult } = require('express-validator');
+const { body } = require('express-validator');
 
 const authController = require('../../controllers/authController');
 
@@ -21,9 +21,9 @@ router.post(
 // @route   POST api/auth/login
 // @desc    Login user
 // @access  Public
-router.post('/login', authController.login);
-
-// @route   GET api/auth/verify
-// @desc    Verify user
-// @access  Public
-router.get('/verify', authController.verify);
+router.post(
+  '/login',
+  body('email').isEmail().withMessage('Please enter a valid email address'),
+  body('password').not().isEmpty().withMessage('Password is required'),
+  authController.login,
+);
