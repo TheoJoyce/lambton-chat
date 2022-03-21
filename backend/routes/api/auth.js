@@ -27,3 +27,5 @@ router.post(
   body('password').not().isEmpty().withMessage('Password is required'),
   authController.login,
 );
+
+module.exports = router;
