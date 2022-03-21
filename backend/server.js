@@ -51,8 +51,9 @@ app.use(
 
 // Routes
 // app.use("/api/users", require("./routes/api/users"));
+app.use('/api/auth', require('./routes/api/auth'));
 
-const PORT = 5000;
+const PORT = process.env.PORT;
 
 app.listen(PORT, () => {
   logger.log({
