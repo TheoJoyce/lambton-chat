@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { body } = require('express-validator');
+const { check } = require('express-validator');
 
 const authController = require('../../controllers/authController');
 
@@ -9,12 +9,14 @@ const authController = require('../../controllers/authController');
 // @access  Public
 router.post(
   '/register',
-  body('email').isEmail().withMessage('Please enter a valid email address'),
-  body('password')
-    .isLength({ min: 8 })
-    .withMessage('Password must be at least 8 characters long'),
-  body('firstName').not().isEmpty().withMessage('First name is required'),
-  body('lastName').not().isEmpty().withMessage('Last name is required'),
+  [
+    check('email').isEmail().withMessage('Please enter a valid email address'),
+    check('password')
+      .isLength({ min: 8 })
+      .withMessage('Password must be at least 8 characters long'),
+    check('firstName').not().isEmpty().withMessage('First name is required'),
+    check('lastName').not().isEmpty().withMessage('Last name is required'),
+  ],
   authController.register,
 );
 
@@ -23,8 +25,10 @@ router.post(
 // @access  Public
 router.post(
   '/login',
-  body('email').isEmail().withMessage('Please enter a valid email address'),
-  body('password').not().isEmpty().withMessage('Password is required'),
+  [
+    check('email').isEmail().withMessage('Please enter a valid email address'),
+    check('password').not().isEmpty().withMessage('Password is required'),
+  ],
   authController.login,
 );
 
