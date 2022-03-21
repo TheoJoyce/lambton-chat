@@ -5,27 +5,20 @@ const jwt = require('jsonwebtoken');
 
 const User = require('../models/User');
 
-const validateUser = (req, res) => {
-  const user = req.body;
-  let errors = [];
-
-  return errors;
-};
+const makeError = (param, msg) => [{ param, msg }];
 
 const register = (req, res) => {
   const { email, password, firstName, lastName } = req.body;
 
-  let errors = validateUser(req.body);
-
-  if (errors.length > 0) {
+  if (User.findOne({ email })) {
     res.status(400).json({
-      errors,
+      errors: makeError('email', 'Email already exists'),
     });
   } else {
     bcrypt.hash(password, saltRounds, (err, hash) => {
       if (err) {
         res.status(500).json({
-          error: err,
+          errors: makeError('password', 'Error hashing password'),
         });
       } else {
         const user = new User({
@@ -38,11 +31,11 @@ const register = (req, res) => {
         user.save((err, user) => {
           if (err) {
             res.status(500).json({
-              error: err,
+              errors: makeError('user', 'Error saving user'),
             });
           } else {
             res.status(201).json({
-              message: 'User created',
+              msg: 'User created',
               user,
             });
           }
