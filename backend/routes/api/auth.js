@@ -32,4 +32,9 @@ router.post(
   authController.login,
 );
 
+// @route   POST api/auth/verify
+// @desc    Verify user
+// @access  Public
+router.post('/verify', authController.verify);
+
 module.exports = router;

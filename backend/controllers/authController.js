@@ -70,9 +70,15 @@ const login = (req, res) => {
         } else {
           bcrypt.compare(password, user.password).then((isMatch) => {
             if (isMatch) {
-              const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-                expiresIn: '7d',
-              });
+              const { _id, firstName, lastName, email, title } = user;
+
+              const token = jwt.sign(
+                { id: _id, firstName, lastName, email, title },
+                process.env.JWT_SECRET,
+                {
+                  expiresIn: '7d',
+                },
+              );
 
               res.status(200).json({ token, msg: 'Logged in' });
             } else {
@@ -95,7 +101,31 @@ const login = (req, res) => {
   }
 };
 
+const verify = (req, res) => {
+  const { token } = req.body;
+
+  if (!token) {
+    res.status(400).json({
+      errors: makeError('token', 'Token is required'),
+    });
+  } else {
+    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+      if (err) {
+        res.status(500).json({
+          errors: makeError('token', 'Invalid token'),
+        });
+      } else {
+        res.status(200).json({
+          msg: 'Token verified',
+          user: decoded,
+        });
+      }
+    });
+  }
+};
+
 module.exports = {
   register,
   login,
+  verify,
 };
