@@ -24,9 +24,12 @@ router.get(
 router.post(
   '/create',
   [authenticate, authErrorHandler],
-  check('name')
-    .isLength({ min: 5, max: 64 })
-    .withMessage('Name must be between 5 and 64 characters in length'),
+  [
+    check('name')
+      .isLength({ min: 5, max: 64 })
+      .withMessage('Name must be between 5 and 64 characters in length'),
+    check('user').exists().withMessage('User is required'),
+  ],
   serverController.createServer,
 );
 
