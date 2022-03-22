@@ -1,5 +1,10 @@
 import React, { Component } from "react";
-import UserService from "../services/user.service";
+import 'bootstrap/dist/css/bootstrap.css';
+import "./home.css";
+import UserService from "../../services/user.service";
+import RegisterForm from "./RegisterForm";
+
+
 export default class Home extends Component {
   constructor(props) {
     super(props);
@@ -24,13 +29,15 @@ export default class Home extends Component {
       }
     );
   }
+
   render() {
     return (
-      <div className="container">
-        <header className="jumbotron">
-          <h3>{this.state.content}</h3>
-        </header>
-      </div>
+   <div className="home-container">
+      <header className="jumbotron">
+          {/* <h3>{this.state.content}</h3> */}
+      </header>
+        <RegisterForm/>
+   </div>
     );
   }
 }

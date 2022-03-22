@@ -6,10 +6,11 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 
 import AuthService from "./services/auth.service";
-import Login from "./components/login.component";
-import Home from "./components/home.component";
+import Login from "./components/Login/login.component";
+import Home from "./components/Home/home.component";
 import Profile from "./components/profile.component";
 import User from "./components/user.component";
+
 
 
 const App = () => {
@@ -26,8 +27,8 @@ const App = () => {
 
   return (
    
-    <div>   
-              <nav className="navbar navbar-expand navbar-dark bg-dark">
+    <div className="">  
+          <nav className="navbar navbar-expand navbar-dark bg-dark">
           <div className="navbar-nav mr-auto">
             <li className="nav-item">
               <Link to={"/home"} className="nav-link">
@@ -67,7 +68,6 @@ const App = () => {
             </div>
           )}
         </nav>
-
       <div className="container mt-3">
         <Routes>
           <Route exact path="/" element={<Home/>} />
@@ -75,9 +75,7 @@ const App = () => {
           <Route exact path="/profile" element={<Profile/>} />
           <Route exact path="/user" element={<User/>} />
         </Routes>
-      
-    </div>
-      
+      </div>
     </div>
   );
 }
