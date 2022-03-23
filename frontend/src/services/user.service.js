@@ -1,6 +1,6 @@
 import axios from 'axios';
 import authHeader from './auth-header';
-const API_URL = '${process.env.BASE_API_URL}/auth/login'
+const API_URL = `${process.env.REACT_APP_BASE_API_URL}/auth/login`
 class UserService {
   getPublicContent() {
     return axios.get(API_URL + 'all');
