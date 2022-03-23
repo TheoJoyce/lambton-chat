@@ -8,7 +8,7 @@ const {
 
 const userController = require('../../controllers/userController');
 
-// @route   POST api/users/:id
+// @route   GET api/users/:id
 // @desc    Get user by ID
 // @access  Private
 router.get(
@@ -17,7 +17,7 @@ router.get(
     userController.getUserbyId,
 );
 
-// @route   POST api/users/:server_id
+// @route   GET api/users/:server_id
 // @desc    Get user by server ID
 // @access  Private
 router.get(
