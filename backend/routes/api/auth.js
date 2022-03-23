@@ -10,12 +10,13 @@ const authController = require('../../controllers/authController');
 router.post(
   '/register',
   [
-    check('email').isEmail().withMessage('Please enter a valid email address'),
+    check('email').trim().isEmail().withMessage('Please enter a valid email address').normalizeEmail(),
     check('password')
+      .trim()
       .isLength({ min: 8 })
       .withMessage('Password must be at least 8 characters long'),
-    check('firstName').not().isEmpty().withMessage('First name is required'),
-    check('lastName').not().isEmpty().withMessage('Last name is required'),
+    check('firstName').trim().not().isEmpty().withMessage('First name is required'),
+    check('lastName').trim().not().isEmpty().withMessage('Last name is required'),
   ],
   authController.register,
 );
@@ -26,8 +27,8 @@ router.post(
 router.post(
   '/login',
   [
-    check('email').isEmail().withMessage('Please enter a valid email address'),
-    check('password').not().isEmpty().withMessage('Password is required'),
+    check('email').trim().isEmail().withMessage('Please enter a valid email address').normalizeEmail(),
+    check('password').trim().not().isEmpty().withMessage('Password is required'),
   ],
   authController.login,
 );
