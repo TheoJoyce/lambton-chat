@@ -52,7 +52,7 @@ app.use(
 // Routes
 // app.use("/api/users", require("./routes/api/users"));
 app.use('/api/auth', require('./routes/api/auth'));
-app.use('/api/servers', require('./routes/api/servers')); // TODO: REMOVE
+app.use('/api/servers/', require('./routes/api/servers'));
 
 const PORT = process.env.PORT;
 

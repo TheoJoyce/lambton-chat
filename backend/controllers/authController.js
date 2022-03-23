@@ -7,7 +7,7 @@ const jwt = require('jsonwebtoken');
 
 const User = require('../models/User');
 
-const makeError = (param, msg) => [{ param, msg }];
+const makeError = require('../helpers/makeError');
 
 const register = (req, res) => {
   const errors = validationResult(req);
