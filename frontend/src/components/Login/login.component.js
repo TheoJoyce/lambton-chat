@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
-import AuthService from "../services/auth.service";
+import AuthService from "../../services/auth.service";
 //this is cheaking if the feilds are filled in properly
 const required = value => {
   if (!value) {
