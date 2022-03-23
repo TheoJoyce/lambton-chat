@@ -9,7 +9,7 @@ const {
 
 const serverController = require('../../controllers/serverController');
 
-// @route   POST api/servers/:id
+// @route   GET api/servers/:id
 // @desc    Get server by ID
 // @access  Private
 router.get(
@@ -26,8 +26,10 @@ router.post(
   [authenticate, authErrorHandler],
   [
     check('name')
+      .trim()
       .isLength({ min: 5, max: 64 })
-      .withMessage('Name must be between 5 and 64 characters in length'),
+      .withMessage('Name must be between 5 and 64 characters in length')
+      .escape(),
     check('user').exists().withMessage('User is required'),
   ],
   serverController.createServer,
