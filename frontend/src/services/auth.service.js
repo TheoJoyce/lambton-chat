@@ -1,5 +1,5 @@
 import axios from "axios";
-const API_URL = '${process.env.BASE_API_URL}/auth/'
+const API_URL = `${process.env.REACT_APP_BASE_API_URL}/auth/`
 class AuthService {
   login(email, password) {
     return axios
