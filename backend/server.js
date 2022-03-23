@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
+const cors = require('cors');
 const winston = require('winston');
 const expressWinston = require('express-winston');
 
@@ -38,6 +39,7 @@ db.once('open', () => {
 });
 
 // Middleware
+app.use(cors());
 app.use(express.json());
 app.use(
   expressWinston.logger({
