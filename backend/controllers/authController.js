@@ -41,7 +41,12 @@ const register = (req, res) => {
               } else {
                 res.status(201).json({
                   msg: 'User created',
-                  user,
+                  user: {
+                    id: user._id,
+                    firstName,
+                    lastName,
+                    email,
+                  },
                 });
               }
             });
