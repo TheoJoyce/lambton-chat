@@ -10,7 +10,7 @@ import Login from "./components/Login/login.component";
 import Home from "./components/Home/home.component";
 import Profile from "./components/profile.component";
 import User from "./components/user.component";
-
+import RegisterForm from "./components/Home/RegisterForm";
 
 
 const App = () => {
@@ -60,11 +60,11 @@ const App = () => {
           ) : (
             <div className="navbar-nav ml-auto">
               <li className="nav-item">
-                <Link to={"/login"} className="nav-link">
-                  Login
-                </Link>
+                <Link to={"/login"} className="nav-link"> Login </Link>
               </li>
-
+              <li>
+              <Link to={"/newuser"} className="nav-link">New User</Link>
+              </li>
             </div>
           )}
         </nav>
@@ -74,6 +74,7 @@ const App = () => {
           <Route exact path="/login" element={<Login/>} />
           <Route exact path="/profile" element={<Profile/>} />
           <Route exact path="/user" element={<User/>} />
+          <Route exact path="/newuser" element={<RegisterForm/>}/>
         </Routes>
       </div>
     </div>
