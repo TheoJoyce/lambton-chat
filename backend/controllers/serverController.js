@@ -16,7 +16,7 @@ const getServerbyId = async (req, res) => {
 };
 
 const joinCodeGenerator = () => {
-  const timestamp = new Date.now();
+  const timestamp = Date.now();
 
   const randomizedNumber = Math.floor(timestamp * Math.random());
 
