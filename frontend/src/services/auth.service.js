@@ -27,5 +27,11 @@ class AuthService {
   getCurrentUser() {
     return JSON.parse(localStorage.getItem('user'));
   }
+  createServer(name, user=localStorage.getItem('user')){
+    return axios.post(API_URL + "servers/create", {
+      name,
+      user
+    });
+  }
 }
 export default new AuthService();
