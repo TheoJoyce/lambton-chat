@@ -22,7 +22,7 @@ router.get(
 // @desc    Get channels by server id
 // @access  Private
 router.get(
-  '/:serverID',
+  '/all/:serverID',
   [authenticate, authErrorHandler],
   check('serverID').isMongoId().withMessage('Invalid server ID'),
   channelController.getChannelsByServerID,
