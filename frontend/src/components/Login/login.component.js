@@ -3,6 +3,7 @@ import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 import AuthService from "../../services/auth.service";
+import { useNavigate } from "react-router-dom";
 const required = (value) => {
   if (!value) {
     return (
@@ -12,7 +13,9 @@ const required = (value) => {
     );
   }
 };
+
 const Login = (props) => {
+  const navigate = useNavigate();
   const form = useRef();
   const checkBtn = useRef();
   const [username, setUsername] = useState("");
@@ -27,6 +30,7 @@ const Login = (props) => {
     const password = e.target.value;
     setPassword(password);
   };
+  
   const handleLogin = (e) => {
     e.preventDefault();
     setMessage("");
@@ -35,7 +39,7 @@ const Login = (props) => {
     if (checkBtn.current.context._errors.length === 0) {
       AuthService.login(username, password).then(
         () => {
-          props.history.push("/profile");
+          navigate('/profile');
           window.location.reload();
         },
         (error) => {
