@@ -1,10 +1,12 @@
 const { validationResult } = require('express-validator');
 
+const Channel = require('../models/Channel');
+
 const getChannelById = (req, res) => {
   const errors = validationResult(req);
 
   if (errors.isEmpty()) {
-    const { id } = req.body;
+    const { id } = req.params;
 
     Channel.findOne({ _id: id })
       .then((channel) => {
@@ -32,7 +34,7 @@ const getChannelsByServerID = (req, res) => {
   const errors = validationResult(req);
 
   if (errors.isEmpty()) {
-    const { id } = req.body;
+    const { id } = req.params;
 
     Channel.find({ serverID: id }).then((channels) => {
       if (channels) {
@@ -61,10 +63,11 @@ const createChannel = (req, res) => {
       server: serverID,
     });
 
-    channel.save().then((err, channel) => {
+    channel.save((err, channel) => {
       if (err) {
         res.status(500).send({
           msg: 'Failed to create channel',
+          err,
         });
       } else {
         res.status(201).send({
