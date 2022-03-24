@@ -1,10 +1,7 @@
 import React, {useState, useEffect} from "react";
-
-// We use Route in order to define the different routes of our application
 import { Routes, Route, Link} from 'react-router-dom';
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
-
 import AuthService from "./services/auth.service";
 import Login from "./components/Login/login.component";
 import Home from "./components/Home/home.component";
@@ -12,21 +9,18 @@ import Profile from "./components/profile.component";
 import User from "./components/user.component";
 import RegisterForm from "./components/Home/RegisterForm";
 
-
 const App = () => {
-
   const [currentUser, setCurrentUser] = useState(undefined);
-
   useEffect(() => {
     const user = AuthService.getCurrentUser();
-
     if (user) {
       setCurrentUser(user);
     }
   }, []);
-
+const logOut = () => {
+  AuthService.logout();
+};
   return (
-   
     <div className="">  
           <nav className="navbar navbar-expand navbar-dark bg-dark">
           <div className="navbar-nav mr-auto">
@@ -52,7 +46,7 @@ const App = () => {
                 </Link>
               </li>
               <li className="nav-item">
-                <a href="/login" className="nav-link" onClick={this.logOut}>
+                <a href="/login" className="nav-link" onClick={logOut}>
                   LogOut
                 </a>
               </li>
