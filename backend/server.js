@@ -52,8 +52,7 @@ app.use(
 );
 
 // Routes
-// app.use("/api/users", require("./routes/api/users"));
-app.use('/api/auth', require('./routes/api/auth'));
+app.use("/api/users", require("./routes/api/users"));
 app.use('/api/servers/', require('./routes/api/servers'));
 app.use('/api/channels/', require('./routes/api/channels'));
 app.use('/api/messages/', require('./routes/api/messages'));
