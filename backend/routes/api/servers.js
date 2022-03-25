@@ -15,7 +15,18 @@ const serverController = require('../../controllers/serverController');
 router.get(
   '/:id',
   [authenticate, authErrorHandler],
+  check('id').isMongoId().withMessage('Invalid server ID'),
   serverController.getServerbyId,
+);
+
+// @route   GET api/servers/code/:code
+// @desc    Get server by join code
+// @access  Private
+router.get(
+  '/code/:code',
+  [authenticate, authErrorHandler],
+  check('code').isNumeric().withMessage('Invalid server code'),
+  serverController.getServerByJoinCode,
 );
 
 // @route   POST api/servers/create
