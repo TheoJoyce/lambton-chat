@@ -15,6 +15,7 @@ const serverController = require('../../controllers/serverController');
 router.get(
   '/:id',
   [authenticate, authErrorHandler],
+  check('id').isMongoId().withMessage('Invalid server ID'),
   serverController.getServerbyId,
 );
 

@@ -5,12 +5,20 @@ const Server = require('../models/Server');
 const makeError = require('../helpers/makeError');
 
 const getServerbyId = async (req, res) => {
-  try {
-    const server = await Server.findById(req.params.id);
-    res.status(200).json(server);
-  } catch (err) {
+  const errors = validationResult(req);
+
+  if (errors.isEmpty()) {
+    try {
+      const server = await Server.findById(req.params.id);
+      res.status(200).json(server);
+    } catch (err) {
+      res.status(400).json({
+        errors: makeError('server', 'Server not found'),
+      });
+    }
+  } else {
     res.status(400).json({
-      errors: makeError('server', 'Server not found'),
+      errors: errors.array(),
     });
   }
 };
