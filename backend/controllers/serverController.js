@@ -15,6 +15,25 @@ const getServerbyId = async (req, res) => {
   }
 };
 
+const getServerByJoinCode = async (req, res) => {
+  const errors = validationResult(req);
+
+  if (errors.isEmpty()) {
+    try {
+      const server = await Server.findOne({ code: req.params.code });
+      res.status(200).json(server);
+    } catch (err) {
+      res.status(400).json({
+        errors: makeError('server', 'Server not found'),
+      });
+    }
+  } else {
+    res.status(400).json({
+      errors: errors.array(),
+    });
+  }
+};
+
 const joinCodeGenerator = () => {
   const timestamp = Date.now();
 
@@ -60,5 +79,6 @@ const createServer = async (req, res) => {
 
 module.exports = {
   getServerbyId,
+  getServerByJoinCode,
   createServer,
 };
