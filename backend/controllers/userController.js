@@ -9,6 +9,54 @@ const User = require('../models/User');
 
 const makeError = require('../helpers/makeError');
 
+const getUserbyId = (req, res) => {
+  const errors = validationResult(req);
+
+  if (errors.isEmpty()) {
+    User.findById(req.params.id)
+      .then((user) => {
+        if (!user) {
+          return res.status(404).json({
+            message: 'User not found',
+          });
+        }
+
+        return res.status(200).json(user);
+      })
+      .catch((err) => {
+        return res.status(500).json(err);
+      });
+  } else {
+    return res.status(400).json({
+      errors: errors.array(),
+    });
+  }
+};
+
+const getUsersByServerId = (req, res) => {
+  const errors = validationResult(req);
+
+  if (errors.isEmpty()) {
+    User.find({ server: req.params.serverID })
+      .then((users) => {
+        if (!users) {
+          return res.status(404).json({
+            message: 'Users not found',
+          });
+        }
+
+        return res.status(200).json(users);
+      })
+      .catch((err) => {
+        return res.status(500).json(err);
+      });
+  } else {
+    return res.status(400).json({
+      errors: errors.array(),
+    });
+  }
+};
+
 const register = (req, res) => {
   const errors = validationResult(req);
 
@@ -131,6 +179,8 @@ const verify = (req, res) => {
 };
 
 module.exports = {
+  getUserbyId,
+  getUsersByServerId,
   register,
   login,
   verify,

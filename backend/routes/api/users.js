@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
+const { check } = require('express-validator');
+
 const {
   authenticate,
   authErrorHandler,
@@ -23,7 +25,7 @@ router.get(
 router.get(
   '/:server_id',
   [authenticate, authErrorHandler],
-  userController.getUserbyServerId,
+  userController.getUsersByServerId,
 );
 
 // @route   POST api/auth/register
