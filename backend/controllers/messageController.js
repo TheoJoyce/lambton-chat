@@ -57,11 +57,13 @@ const createMessage = (req, res) => {
 
   if (errors.isEmpty()) {
     const { text, serverID, channelID } = req.body;
+    const { user } = req;
 
     const newMessage = new Message({
       text,
       server: serverID,
       channel: channelID,
+      user: user.id,
     });
 
     newMessage.save((err, message) => {

@@ -56,14 +56,15 @@ const createServer = async (req, res) => {
   const errors = validationResult(req);
 
   if (errors.isEmpty()) {
-    const { name, user } = req.body;
+    const { name } = req.body;
+    const { user } = req;
 
     const code = joinCodeGenerator();
 
     const server = new Server({
       name,
       code,
-      admin: user._id,
+      admin: user.id,
     });
 
     server.save((err, server) => {
