@@ -19,11 +19,11 @@ router.get(
   userController.getUserbyId,
 );
 
-// @route   GET api/users/:server_id
+// @route   GET api/users/all/:server_id
 // @desc    Get user by server ID
 // @access  Private
 router.get(
-  '/:server_id',
+  '/all/:serverID',
   [authenticate, authErrorHandler],
   userController.getUsersByServerId,
 );
