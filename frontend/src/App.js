@@ -1,4 +1,9 @@
 import React, {useState, useEffect} from "react";
+//for chat
+
+
+
+//for login 
 import { Routes, Route, Link} from 'react-router-dom';
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
@@ -8,6 +13,7 @@ import Home from "./components/Home/home.component";
 import Profile from "./components/profile.component";
 import User from "./components/user.component";
 import RegisterForm from "./components/Home/RegisterForm";
+import CreateServer from "./components/Server/createserver";
 
 const App = () => {
   const [currentUser, setCurrentUser] = useState(undefined);
@@ -28,12 +34,11 @@ const logOut = () => {
               <Link to={"/home"} className="nav-link">
                 Home
               </Link>
-            </li>
-           
+            </li>           
             {currentUser && (
               <li className="nav-item">
-                <Link to={"/user"} className="nav-link">
-                  User
+                <Link to={"/createserver"} className="nav-link">
+                  Create Server
                 </Link>
               </li>
             )}
@@ -65,6 +70,7 @@ const logOut = () => {
       <div className="container mt-3">
         <Routes>
           <Route exact path="/" element={<Home/>} />
+          <Route exact path="/createserver" element={<CreateServer/>}/>
           <Route exact path="/login" element={<Login/>} />
           <Route exact path="/profile" element={<Profile/>} />
           <Route exact path="/user" element={<User/>} />

@@ -41,7 +41,6 @@ router.post(
       .isLength({ min: 5, max: 64 })
       .withMessage('Name must be between 5 and 64 characters in length')
       .escape(),
-    check('user').exists().withMessage('User is required'),
   ],
   serverController.createServer,
 );
