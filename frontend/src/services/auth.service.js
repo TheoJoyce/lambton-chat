@@ -27,20 +27,9 @@ class AuthService {
   getCurrentUser() {
     return JSON.parse(localStorage.getItem('user'));
   }
-  createServer(name, user){
-    //still is progress needs more work 
-    const token = JSON.parse(localStorage.getItem('user'));
-    console.log(token);
-    axios.post(API_URL + "users/auth/verify", {headers: {"Authorization" : `Bearer ${token}`}})
-    .then(res =>{
-      console.log(res.data);
-      user = res.data;
-    });
-    //good code
-    return axios.post(API_URL + "servers/create", {
-      name,
-      user
-    });
+  createServer(name, token = JSON.parse(localStorage.getItem('user'))){
+    token = token.token;
+    return axios.post(API_URL + "servers/create", {name}, { headers: {"Authorization": `Bearer ${token}`} });
   }
 }
 export default new AuthService();
