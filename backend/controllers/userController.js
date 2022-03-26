@@ -124,10 +124,17 @@ const login = (req, res) => {
         } else {
           bcrypt.compare(password, user.password).then((isMatch) => {
             if (isMatch) {
-              const { _id, firstName, lastName, email, title } = user;
+              const { _id, firstName, lastName, email, title, server } = user;
 
               const token = jwt.sign(
-                { id: _id, firstName, lastName, email, title },
+                {
+                  id: _id,
+                  firstName,
+                  lastName,
+                  email,
+                  title,
+                  server,
+                },
                 process.env.JWT_SECRET,
                 {
                   expiresIn: '7d',
@@ -188,12 +195,14 @@ const updateUser = (req, res) => {
     const lastName = req.body.lastName || oldUser.lastName;
     const email = req.body.email || oldUser.email;
     const title = req.body.title || oldUser.title;
+    const server = req.body.serverID || oldUser.server;
 
     User.findByIdAndUpdate(oldUser.id, {
       firstName,
       lastName,
       email,
       title,
+      server,
     })
       .then((user) => {
         if (!user) {

@@ -28,6 +28,22 @@ router.get(
   userController.getUsersByServerId,
 );
 
+// @route   POST api/users/update
+// @desc    Update user
+// @access  Private
+router.post(
+  '/update',
+  [authenticate, authErrorHandler],
+  [
+    check('firstName').optional().trim().escape(),
+    check('lastName').optional().trim().escape(),
+    check('email').optional().isEmail().withMessage('Invalid email address'),
+    check('title').optional().trim().escape(),
+    check('serverID').optional().isMongoId().withMessage('Invalid server ID'),
+  ],
+  userController.updateUser,
+);
+
 // @route   POST api/auth/register
 // @desc    Register user
 // @access  Public
@@ -81,7 +97,5 @@ router.post(
 // @desc    Verify user
 // @access  Public
 router.post('/auth/verify', userController.verify);
-
-
 
 module.exports = router;
