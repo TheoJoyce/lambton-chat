@@ -7,6 +7,7 @@ const {
 } = require('../../middleware/authenticate');
 
 const channelController = require('../../controllers/channelController');
+const adminCheck = require('../../middleware/adminCheck');
 
 // @route   GET api/channels/:id
 // @desc    Get channel by id
@@ -42,7 +43,9 @@ router.post(
       .withMessage('Invalid channel name')
       .escape(),
     check('serverID').isMongoId().withMessage('Invalid server ID'),
+    check('admin').isMongoId().withMessage('Invalid admin ID'),
   ],
+  adminCheck,
   channelController.createChannel,
 );
 

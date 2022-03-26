@@ -1,4 +1,4 @@
-const { makeError } = require('../helpers/makeError');
+const makeError = require('../helpers/makeError');
 
 const adminCheck = (req, res, next) => {
   const userID = req.user.id;
