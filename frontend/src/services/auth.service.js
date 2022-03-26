@@ -29,7 +29,12 @@ class AuthService {
   }
   createServer(name, token = JSON.parse(localStorage.getItem('user'))){
     token = token.token;
-    return axios.post(API_URL + "servers/create", {name}, { headers: {"Authorization": `Bearer ${token}`} });
+    return axios
+      .post(API_URL + "servers/create", {name}, { headers: {"Authorization": `Bearer ${token}`} })
+      .then(res => {
+        localStorage.setItem("server", JSON.stringify(res.data));
+        axios.post(API_URL + "users/update/:server_id", JSON.parse(localStorage.getItem('server')));
+      })
   }
 }
 export default new AuthService();
