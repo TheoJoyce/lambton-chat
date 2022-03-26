@@ -178,10 +178,47 @@ const verify = (req, res) => {
   }
 };
 
+const updateUser = (req, res) => {
+  const errors = validationResult(req);
+
+  if (errors.isEmpty()) {
+    const oldUser = req.user;
+
+    const firstName = req.body.firstName || oldUser.firstName;
+    const lastName = req.body.lastName || oldUser.lastName;
+    const email = req.body.email || oldUser.email;
+    const title = req.body.title || oldUser.title;
+
+    User.findByIdAndUpdate(oldUser.id, {
+      firstName,
+      lastName,
+      email,
+      title,
+    })
+      .then((user) => {
+        if (!user) {
+          return res.status(404).json({
+            msg: 'User not found',
+          });
+        }
+
+        return res.status(200).json(user);
+      })
+      .catch((err) => {
+        return res.status(500).json(err);
+      });
+  } else {
+    return res.status(400).json({
+      errors: errors.array(),
+    });
+  }
+};
+
 module.exports = {
   getUserbyId,
   getUsersByServerId,
   register,
   login,
   verify,
+  updateUser,
 };
