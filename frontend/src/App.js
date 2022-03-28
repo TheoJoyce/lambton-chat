@@ -1,9 +1,4 @@
-import React, {useState, useEffect} from "react";
-//for chat
-
-
-
-//for login 
+import React, {useState, useEffect} from "react"; 
 import { Routes, Route, Link} from 'react-router-dom';
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
@@ -14,6 +9,7 @@ import Profile from "./components/profile.component";
 import User from "./components/user.component";
 import RegisterForm from "./components/Home/RegisterForm";
 import CreateServer from "./components/Server/createserver";
+import JoinServer from "./components/Server/joinserver";
 
 const App = () => {
   const [currentUser, setCurrentUser] = useState(undefined);
@@ -41,6 +37,13 @@ const logOut = () => {
                   Create Server
                 </Link>
               </li>
+            )}
+            {currentUser && (
+              <li className="nav-item">
+              <Link to={"/joinserver"} className="nav-link">
+                Join Server
+              </Link>
+            </li>
             )}
           </div>
           {currentUser ? (
@@ -71,10 +74,12 @@ const logOut = () => {
         <Routes>
           <Route exact path="/" element={<Home/>} />
           <Route exact path="/createserver" element={<CreateServer/>}/>
+          <Route exact path="/joinserver" element={<JoinServer/>}/>
           <Route exact path="/login" element={<Login/>} />
           <Route exact path="/profile" element={<Profile/>} />
           <Route exact path="/user" element={<User/>} />
           <Route exact path="/newuser" element={<RegisterForm/>}/>
+         
         </Routes>
       </div>
     </div>
