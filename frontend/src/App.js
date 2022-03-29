@@ -10,6 +10,7 @@ import User from "./components/user.component";
 import RegisterForm from "./components/Home/RegisterForm";
 import CreateServer from "./components/Server/createserver";
 import JoinServer from "./components/Server/joinserver";
+import ChatMessages from "./components/ChatBox/lib/components/Chat/ChatMessages";
 
 const App = () => {
   const [currentUser, setCurrentUser] = useState(undefined);
@@ -74,6 +75,7 @@ const logOut = () => {
         <Routes>
           <Route exact path="/" element={<Home/>} />
           <Route exact path="/createserver" element={<CreateServer/>}/>
+          <Route exact path="/server-chat" element={<ChatMessages/>}/>
           <Route exact path="/joinserver" element={<JoinServer/>}/>
           <Route exact path="/login" element={<Login/>} />
           <Route exact path="/profile" element={<Profile/>} />
