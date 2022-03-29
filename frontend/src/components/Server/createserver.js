@@ -34,7 +34,7 @@ const Create = (props) => {
     if (checkBtn.current.context._errors.length === 0) {
       AuthService.createServer(name).then(
         () => {
-          navigate('/home');
+          navigate('/server-chat');
           window.location.reload();
         },
         (error) => {
