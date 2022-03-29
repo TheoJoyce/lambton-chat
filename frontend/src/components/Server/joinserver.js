@@ -14,16 +14,16 @@ const required = (value) => {
   }
 };
 
-const JoinCode = (props) => {
+const Code = (props) => {
   const navigate = useNavigate();
   const form = useRef();
   const checkBtn = useRef();
-  const [joinCode, setJoinCode] = useState("");
+  const [code, setCode] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
-  const onChangeJoinCode = (e) => {
-    const joinCode = e.target.value;
-    setJoinCode(joinCode);
+  const onChangeCode = (e) => {
+    const code = e.target.value;
+    setCode(code);
   };
 
   const handleCreate = (e) => {
@@ -32,7 +32,7 @@ const JoinCode = (props) => {
     setLoading(true);
     form.current.validateAll();
     if (checkBtn.current.context._errors.length === 0) {
-      AuthService.joinServer(joinCode).then(
+      AuthService.joinServer(code).then(
         () => {
           navigate('/home');
           window.location.reload();
@@ -63,8 +63,8 @@ const JoinCode = (props) => {
               type="text"
               className="form-control"
               name="name"
-              value={joinCode}
-              onChange={onChangeJoinCode}
+              value={code}
+              onChange={onChangeCode}
               validations={[required]}
             />
           </div>
@@ -89,4 +89,4 @@ const JoinCode = (props) => {
     </div>
   );
 };
-export default JoinCode;
+export default Code;
