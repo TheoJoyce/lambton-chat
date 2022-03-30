@@ -10,6 +10,7 @@ import User from "./components/user.component";
 import RegisterForm from "./components/Home/RegisterForm";
 import CreateServer from "./components/Server/createserver";
 import JoinServer from "./components/Server/joinserver";
+import NewChannel from "./components/Channel/createNewChannel";
 import ChatMessages from "./components/ChatBox/lib/components/Chat/ChatMessages";
 
 const App = () => {
@@ -20,9 +21,17 @@ const App = () => {
       setCurrentUser(user);
     }
   }, []);
+  const [currentServer, setCurrentServer] =useState(undefined);
+  useEffect(() =>{
+    const server = AuthService.getCurrentServer();
+    if (server){
+      setCurrentServer(server);
+    }
+  }, []);
 const logOut = () => {
   AuthService.logout();
 };
+
   return (
     <div className="">  
           <nav className="navbar navbar-expand navbar-dark bg-dark">
@@ -45,6 +54,13 @@ const logOut = () => {
                 Join Server
               </Link>
             </li>
+            )}
+            {currentUser && currentServer && (
+              <li className="nav-item">
+                <Link to={"/createNewChannel"} className="nav-link">
+                  Create Channel
+                </Link>
+              </li>
             )}
           </div>
           {currentUser ? (
@@ -81,6 +97,7 @@ const logOut = () => {
           <Route exact path="/profile" element={<Profile/>} />
           <Route exact path="/user" element={<User/>} />
           <Route exact path="/newuser" element={<RegisterForm/>}/>
+          <Route exact path="/createNewChannel" element={<NewChannel/>}/>
          
         </Routes>
       </div>
