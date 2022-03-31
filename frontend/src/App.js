@@ -11,6 +11,7 @@ import RegisterForm from "./components/Home/RegisterForm";
 import CreateServer from "./components/Server/createserver";
 import JoinServer from "./components/Server/joinserver";
 import NewChannel from "./components/Channel/createNewChannel";
+import ListChannel from "./components/Channel/channelList";
 import ChatMessages from "./components/ChatBox/lib/components/Chat/ChatMessages";
 
 const App = () => {
@@ -62,6 +63,13 @@ const logOut = () => {
                 </Link>
               </li>
             )}
+             {currentUser && currentServer && (
+              <li className="nav-item">
+                <Link to={"/channelList"} className="nav-link">
+                  Channels
+                </Link>
+              </li>
+            )}
           </div>
           {currentUser ? (
             <div className="navbar-nav ml-auto">
@@ -98,6 +106,7 @@ const logOut = () => {
           <Route exact path="/user" element={<User/>} />
           <Route exact path="/newuser" element={<RegisterForm/>}/>
           <Route exact path="/createNewChannel" element={<NewChannel/>}/>
+          <Route exact path="/channelList" element={<ListChannel/>}/>
          
         </Routes>
       </div>
