@@ -56,9 +56,24 @@ class AuthService {
     token = token.token;
     const id = JSON.parse(localStorage.getItem("server"));
     const serverID = id.server._id;
-    const admin = "623b5bb668dc21aa369b0d1c";
+    const admin = id.server.admin;
     return axios
       .post(API_URL + "channels/create", {name, serverID, admin}, { headers: {"Authorization": `Bearer ${token}`} })
+  }
+  //view channels 
+  viewChannel(token = JSON.parse(localStorage.getItem('user'))){
+    token = token.token;
+    const id = JSON.parse(localStorage.getItem("server"));
+    const serverID = id.server._id;
+    console.log (serverID);
+    axios
+      .get(API_URL + "channels/all/" + serverID, { headers: {"Authorization": `Bearer ${token}`} })
+      .then (res => {
+        localStorage.removeItem('channels');
+        localStorage.setItem('channels', JSON.stringify(res.data));
+      })
+      console.log (JSON.parse(localStorage.getItem('channels')));
+      return JSON.parse(localStorage.getItem('channels'));
   }
 }
 export default new AuthService();
