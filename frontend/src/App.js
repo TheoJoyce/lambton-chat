@@ -95,7 +95,7 @@ const logOut = () => {
             </div>
           )}
         </nav>
-      <div className="container mt-3">
+      <div>
         <Routes>
           <Route exact path="/" element={<Home/>} />
           <Route exact path="/createserver" element={<CreateServer/>}/>
