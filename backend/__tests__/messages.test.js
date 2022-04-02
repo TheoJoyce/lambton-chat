@@ -4,11 +4,13 @@ const request = require('supertest');
 const jwt = require("jsonwebtoken");
 const db = require("./config/database");
 const agent = request.agent(app);
-const Channel = require("../models/Channel");
-const User = require("../models/User");
-const Server = require("../models/Server");
+const Message = require("../models/Message");
 
 let token;
+
+const baseMessage = {
+    text: "testing 123"
+};
 
 const baseServer = {
     name: "testServerName",
@@ -37,8 +39,8 @@ beforeAll(async () => {
         process.env.JWT_SECRET
         );
     }); 
-    const serverToSave = new Server(baseServer);
 });
+    
 
 beforeAll(async () => await db.connect());
 afterAll(async () => await db.clear());
@@ -47,32 +49,31 @@ afterAll(async () => await db.close());
 //test the GET routes
 //------------------------------------------------------------------
 
-//test @route GET /api/channels/:id
+//test @route GET /api/messages/:id
 //@access Private
 describe("GET /:id", () => {
-    test("it should get the id of the channel and return 200", async () => {
-        const channelToSave = new Channel(baseChannel);
-        const savedChannel = await channelToSave.save();
+    test("it should get the id of the message and return 200", async () => {
+        const validMessage = new Message(baseMessage);
+        const savedMessage = await validMessage.save();
         
         return request(app)
-            .get(`/api/channels/${savedChannel._id}`)
+            .get(`/api/messages/${savedMessage._id}`)
             .set('Authorization', `Bearer ${token}`)
-            //.send({baseChannel})
             .then((response) => {
                 expect(response.statusCode).toBe(200);
         });
     });
 });
 
-//test @route GET /api/channels/all/:serverID
+//test @route GET /api/messages/:serverID/:channelID
 //@access Private
-describe("GET /all/:serverID", () => {
-    test("it should get all the channels based on server id and return 200", async () => {
-        const channelToSave = new Channel(baseChannel);
-        const savedChannel = await channelToSave.save();
+describe("GET /messages/:serverID/:channelID", () => {
+    test("it should get the message by serverID and channelID and return 200", async () => {
+        const validMessage = new Message(baseMessage);
+        const savedMessage = await validMessage.save();
         
         return request(app)
-            .get(`/api/users/all/${savedChannel.serverID}`)
+            .get(`/api/messages/${savedMessage.serverID}/${savedMessage.channelID}`)
             .set('Authorization', `Bearer ${token}`)
             .then((response) => {
                 expect(response.statusCode).toBe(200);
@@ -84,19 +85,18 @@ describe("GET /all/:serverID", () => {
 //test the POST routes
 //------------------------------------------------------------------
 
-//test @route POST /api/channels/create
+//test @route POST /api/messages/create
 //@access Private
-describe("POST /create ...when passed a channel name", () => {
+describe("POST /create ...when passed a message", () => {
     test("it should respond with 201 status code", async () => {
-        const channelToSave = new Channel(baseChannel);
-        const savedChannel = await channelToSave.save();
-        return request(app)
-        .post("/api/channels/create")
-        .set('Authorization', `Bearer ${token}`)
-        .send({token})
-        .send({...baseChannel})
-        .then((response) => {
-            expect(response.statusCode).toBe(201);
-        });
+        const validMessage = new Message(baseMessage);
+        const savedMessage = await validMessage.save();
+
+        const res = await agent.post("/api/messages/create")
+        .set('Authorization', `Bearer ${token}`)  
+        .send({...baseMessage})
+        .send(savedMessage.serverID, savedMessage.channelID);
+        expect(res.body).toBeTruthy();
+        expect(res.statusCode).toBe(201);
     });
 });

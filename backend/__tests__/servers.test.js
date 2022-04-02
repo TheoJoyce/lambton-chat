@@ -4,26 +4,20 @@ const request = require('supertest');
 const jwt = require("jsonwebtoken");
 const db = require("./config/database");
 const agent = request.agent(app);
-const Channel = require("../models/Channel");
 const User = require("../models/User");
 const Server = require("../models/Server");
 
 let token;
-
+let savedServer;
 const baseServer = {
-    name: "testServerName",
-    code: "1789456123"
-}
-
-const baseChannel = {
-    name: "testChannel"
+    name: "testServerName"
 };
 
 const baseUser = {
-    firstName: "John",
-    lastName: "Smith",
-    email: "JohnSmith@gmail.com",
-    password: "testing123"
+        firstName: "John",
+        lastName: "Smith",
+        email: "JohnSmith@gmail.com",
+        password: "testing123"
 };
 
 beforeAll(async () => {
@@ -38,6 +32,12 @@ beforeAll(async () => {
         );
     }); 
     const serverToSave = new Server(baseServer);
+    serverToSave.save((err, server) => {
+        savedServer = {
+            ...baseServer,
+            code: "1789456123"
+        }
+    });
 });
 
 beforeAll(async () => await db.connect());
@@ -47,33 +47,33 @@ afterAll(async () => await db.close());
 //test the GET routes
 //------------------------------------------------------------------
 
-//test @route GET /api/channels/:id
+//test @route GET /api/servers/:id
 //@access Private
 describe("GET /:id", () => {
-    test("it should get the id of the channel and return 200", async () => {
-        const channelToSave = new Channel(baseChannel);
-        const savedChannel = await channelToSave.save();
+    test("it should get the id of the server and return 200", async () => {
+        //const validServer = new Server(baseServer);
+        //const savedServer = await validServer.save();
         
         return request(app)
-            .get(`/api/channels/${savedChannel._id}`)
+            .get(`/api/servers/${savedServer._id}`)
             .set('Authorization', `Bearer ${token}`)
-            //.send({baseChannel})
             .then((response) => {
                 expect(response.statusCode).toBe(200);
         });
     });
 });
 
-//test @route GET /api/channels/all/:serverID
+//test @route GET /api/code/:code
 //@access Private
-describe("GET /all/:serverID", () => {
-    test("it should get all the channels based on server id and return 200", async () => {
-        const channelToSave = new Channel(baseChannel);
-        const savedChannel = await channelToSave.save();
+describe("GET /code/:code", () => {
+    test("it should get the server by join code and return 200", async () => {
+        //const validServer = new Server(baseServer);
+        //const savedServer = await validServer.save();
         
         return request(app)
-            .get(`/api/users/all/${savedChannel.serverID}`)
+            .get(`/api/servers/code/${savedServer.code}`)
             .set('Authorization', `Bearer ${token}`)
+            .send({...baseServer})
             .then((response) => {
                 expect(response.statusCode).toBe(200);
         });
@@ -84,19 +84,19 @@ describe("GET /all/:serverID", () => {
 //test the POST routes
 //------------------------------------------------------------------
 
-//test @route POST /api/channels/create
+//test @route POST /api/servers/create
 //@access Private
-describe("POST /create ...when passed a channel name", () => {
+describe("POST /create ...when passed a name", () => {
     test("it should respond with 201 status code", async () => {
-        const channelToSave = new Channel(baseChannel);
-        const savedChannel = await channelToSave.save();
+        //const validServer = new Server(baseServer);
+        //const savedServer = await validServer.save();
+
         return request(app)
-        .post("/api/channels/create")
-        .set('Authorization', `Bearer ${token}`)
-        .send({token})
-        .send({...baseChannel})
-        .then((response) => {
-            expect(response.statusCode).toBe(201);
+            .get("/api/servers/create")
+            .set('Authorization', `Bearer ${token}`)
+            .send({...baseServer})
+            .then((response) => {
+                expect(response.statusCode).toBe(201);
         });
     });
 });
