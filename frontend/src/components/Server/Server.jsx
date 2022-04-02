@@ -44,9 +44,29 @@ const Server = () => {
         fetchChannel();
     }, [channelID]);
 
+    // Decode server name
+    const getServerName = () =>
+        new DOMParser().parseFromString(server.name, "text/html")
+            .documentElement.textContent;
+
     return (
-        <section className="container d-flex mt-2">
-            <ChannelList />
+        <section className="container d-flex mt-2" style={{ height: "900px" }}>
+            <section>
+                {server && (
+                    <>
+                        <div>
+                            <h1 className="text-center">{getServerName()}</h1>
+                        </div>
+
+                        <div className="shadow rounded p-2 my-2">
+                            <p className="my-0 text-center fw-bolder">{server.code}</p>
+                        </div>
+                    </>
+                )}
+                <div className="shadow" style={{ height: "795px" }}>
+                    <ChannelList />
+                </div>
+            </section>
             <section className="container-sm">
                 {channel && server && user && (
                     <Channel

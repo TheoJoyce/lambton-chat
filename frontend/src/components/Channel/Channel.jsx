@@ -38,26 +38,33 @@ const Channel = ({ channel, serverID, user }) => {
             className="container-sm shadow rounded-3 p-2 d-flex flex-column"
             style={{ height: "900px" }}
         >
-            <h1>{channel.name}</h1>
-            <ul className="list-unstyled mt-auto">
-                {messages.length > 0 ? (
-                    messages.map((message) => {
-                        const { _id, text, user: userID, createdAt } = message;
-                        return (
-                            <Message
-                                key={_id}
-                                text={text}
-                                userID={userID}
-                                timestamp={createdAt}
-                            />
-                        );
-                    })
-                ) : (
-                    <h2 className="alert alert-warning text-center">
-                        No messages yet
-                    </h2>
-                )}
-            </ul>
+            <h2>{channel.name}</h2>
+            <div className="d-flex flex-column-reverse overflow-auto mt-auto">
+                <ul className="list-unstyled">
+                    {messages.length > 0 ? (
+                        messages.map((message) => {
+                            const {
+                                _id,
+                                text,
+                                user: userID,
+                                createdAt,
+                            } = message;
+                            return (
+                                <Message
+                                    key={_id}
+                                    text={text}
+                                    userID={userID}
+                                    timestamp={createdAt}
+                                />
+                            );
+                        })
+                    ) : (
+                        <h3 className="alert alert-warning text-center">
+                            No messages yet
+                        </h3>
+                    )}
+                </ul>
+            </div>
             <MessageBox
                 channelID={channel._id}
                 channelName={channel.name}
