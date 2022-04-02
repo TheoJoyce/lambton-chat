@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import AuthService from "../../services/auth.service";
 
 import Channel from "../Channel/Channel";
+import ChannelList from "../Channel/channelList";
 
 const Server = () => {
     const [user, setUser] = useState(null);
@@ -44,8 +45,9 @@ const Server = () => {
     }, [channelID]);
 
     return (
-        <section className="container">
-            <ul className="list-unstyled container-sm">
+        <section className="container d-flex mt-2">
+            <ChannelList />
+            <section className="container-sm">
                 {channel && server && user && (
                     <Channel
                         channel={channel}
@@ -53,7 +55,7 @@ const Server = () => {
                         user={user}
                     />
                 )}
-            </ul>
+            </section>
         </section>
     );
 };

@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react"; 
+import React, {useState, useEffect, useRef} from "react"; 
 import { Routes, Route, Link} from 'react-router-dom';
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
@@ -14,6 +14,7 @@ import NewChannel from "./components/Channel/createNewChannel";
 import ListChannel from "./components/Channel/channelList";
 import ChatMessages from "./components/ChatBox/lib/components/Chat/ChatMessages";
 import Server from "./components/Server/Server";
+import axios from "axios";
 
 const App = () => {
   const [currentUser, setCurrentUser] = useState(undefined);
@@ -23,7 +24,7 @@ const App = () => {
       setCurrentUser(user);
     }
   }, []);
-  const [currentServer, setCurrentServer] =useState(undefined);
+  const [currentServer, setCurrentServer] =useState({});
   useEffect(() =>{
     const server = AuthService.getCurrentServer();
     if (server){
@@ -33,6 +34,30 @@ const App = () => {
 const logOut = () => {
   AuthService.logout();
 };
+
+  // To prevent major refactoring, ref is needed to check for changes in the DOM
+  const isFirstRender = useRef(true);
+  const [defaultChannel, setDefaultChannel] = useState("");
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+    } else {
+      const fetchDefaultChannel = async () => {
+          const token = AuthService.getCurrentUser().token;
+          const channels = await axios.get(
+              `${process.env.REACT_APP_BASE_API_URL}/channels/all/${currentServer.server._id}`,
+              {
+                  headers: {
+                      Authorization: `Bearer ${token}`,
+                  },
+              }
+          );
+          const defaultChannel = channels.data[0];
+          setDefaultChannel(defaultChannel);
+      };
+      fetchDefaultChannel();
+    }
+  }, [currentServer]);
 
   return (
     <div className="">  
@@ -58,7 +83,7 @@ const logOut = () => {
             </li>
             )}
             {currentUser && currentServer && (
-                <Link to={'/server'} className="nav-link">
+                <Link to={`/channel/${defaultChannel._id}`} className="nav-link">
                   Server
                 </Link>
               )

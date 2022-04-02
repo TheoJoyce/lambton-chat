@@ -17,7 +17,7 @@ const ListChannel = () => {
         <ProSidebar>
              <SidebarHeader> Channel List </SidebarHeader>
             <Menu iconShape="round">
-                {channels.map(({_id, name}) =>(<MenuItem className="nav-item" key={_id}> <Link to={'/'+_id} className="nav-link">{name}</Link></MenuItem>))} 
+                {channels.map(({_id, name}) =>(<MenuItem className="nav-item" key={_id}> <Link to={'/channel/'+_id} className="nav-link">{name}</Link></MenuItem>))} 
             </Menu>   
         </ProSidebar>
     )

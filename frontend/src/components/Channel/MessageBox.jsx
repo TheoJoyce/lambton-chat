@@ -1,7 +1,13 @@
 import React, { useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
-const MessageBox = ({ channelName }) => {
+import AuthService from "../../services/auth.service";
+
+const MessageBox = ({ channelID, channelName, messageCallback }) => {
     const [messageText, setMessageText] = useState("");
+
+    const navigate = useNavigate();
 
     const handleChange = (e) => {
         setMessageText(e.target.value);
@@ -9,8 +15,23 @@ const MessageBox = ({ channelName }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // TODO: send message to server
+        axios.post(
+            `${process.env.REACT_APP_BASE_API_URL}/messages/create`,
+            {
+                text: messageText,
+                serverID: AuthService.getCurrentServer().server._id,
+                channelID,
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${
+                        AuthService.getCurrentUser().token
+                    }`,
+                },
+            }
+        );
         setMessageText("");
+        messageCallback();
     };
     return (
         <form onSubmit={handleSubmit}>
