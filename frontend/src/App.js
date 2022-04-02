@@ -114,7 +114,7 @@ const logOut = () => {
           <Route exact path="/newuser" element={<RegisterForm/>}/>
           <Route exact path="/createNewChannel" element={<NewChannel/>}/>
           <Route exact path="/channelList" element={<ListChannel/>}/>
-         <Route path="/server" element={<Server/>} />
+          <Route path="/channel/:channelID" element={<Server/>} />
         </Routes>
       </div>
     </div>
