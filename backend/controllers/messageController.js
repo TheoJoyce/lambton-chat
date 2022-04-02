@@ -36,15 +36,17 @@ const getMessagesByServerChannelID = (req, res) => {
   if (errors.isEmpty()) {
     const { serverID, channelID } = req.params;
 
-    Message.find({ server: serverID, channel: channelID }).then((messages) => {
-      if (messages) {
-        res.status(200).send(messages);
-      } else {
-        res.status(404).send({
-          msg: 'Messages not found',
-        });
-      }
-    });
+    Message.find({ server: serverID, channel: channelID })
+      .limit(50)
+      .then((messages) => {
+        if (messages) {
+          res.status(200).send(messages);
+        } else {
+          res.status(404).send({
+            msg: 'Messages not found',
+          });
+        }
+      });
   } else {
     res.status(400).json({
       errors: errors.array(),

@@ -7,6 +7,8 @@ import AuthService from "../../services/auth.service";
 import Channel from "../Channel/Channel";
 import ChannelList from "../Channel/channelList";
 
+import { unescapeHtml } from "../../helpers/unescapeHtml";
+
 const Server = () => {
     const [user, setUser] = useState(null);
     const [server, setServer] = useState(null);
@@ -17,6 +19,7 @@ const Server = () => {
     useEffect(() => {
         const token = AuthService.getCurrentUser().token;
         const fetchUser = async () => {
+            // Ideally would use redux to store user
             const response = await axios.post(
                 `${process.env.REACT_APP_BASE_API_URL}/users/auth/verify/`,
                 { token }
@@ -44,26 +47,22 @@ const Server = () => {
         fetchChannel();
     }, [channelID]);
 
-    // Decode server name
-    const getServerName = () =>
-        new DOMParser().parseFromString(server.name, "text/html")
-            .documentElement.textContent;
-
     return (
         <section className="container d-flex mt-2" style={{ height: "900px" }}>
             <section>
                 {server && (
                     <>
                         <div>
-                            <h1 className="text-center">{getServerName()}</h1>
+                            <h1 className="text-center">{unescapeHtml(server.name)}</h1>
                         </div>
 
                         <div className="shadow rounded p-2 my-2">
+                            <h5 className="text-center fs-6">Join Code</h5>
                             <p className="my-0 text-center fw-bolder">{server.code}</p>
                         </div>
                     </>
                 )}
-                <div className="shadow" style={{ height: "795px" }}>
+                <div className="shadow" style={{ height: "770px" }}>
                     <ChannelList />
                 </div>
             </section>

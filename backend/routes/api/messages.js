@@ -24,6 +24,10 @@ router.get(
 router.get(
   '/:serverID/:channelID',
   [authenticate, authErrorHandler],
+  [
+    check('serverID').isMongoId().withMessage('Invalid server ID'),
+    check('channelID').isMongoId().withMessage('Invalid channel ID'),
+  ],
   messageController.getMessagesByServerChannelID,
 );
 
