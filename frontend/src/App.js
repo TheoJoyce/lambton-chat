@@ -13,6 +13,7 @@ import JoinServer from "./components/Server/joinserver";
 import NewChannel from "./components/Channel/createNewChannel";
 import ListChannel from "./components/Channel/channelList";
 import ChatMessages from "./components/ChatBox/lib/components/Chat/ChatMessages";
+import Server from "./components/Server/Server";
 
 const App = () => {
   const [currentUser, setCurrentUser] = useState(undefined);
@@ -56,6 +57,12 @@ const logOut = () => {
               </Link>
             </li>
             )}
+            {currentUser && currentServer && (
+                <Link to={'/server'} className="nav-link">
+                  Server
+                </Link>
+              )
+            }
             {currentUser && currentServer && (
               <li className="nav-item">
                 <Link to={"/createNewChannel"} className="nav-link">
@@ -107,7 +114,7 @@ const logOut = () => {
           <Route exact path="/newuser" element={<RegisterForm/>}/>
           <Route exact path="/createNewChannel" element={<NewChannel/>}/>
           <Route exact path="/channelList" element={<ListChannel/>}/>
-         
+         <Route path="/server" element={<Server/>} />
         </Routes>
       </div>
     </div>
