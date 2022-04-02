@@ -23,12 +23,12 @@ const Channel = ({ channel, serverID, user }) => {
         setMessages(messages);
     }, [serverID, channel._id]);
 
-    const THIRTY_SECONDS_MS = 30000;
+    const FIFTEEN_SECONDS_MS = 15000;
     useEffect(() => {
         // Update messages on load and then every 30 seconds
         // Socket.io would be a better implementation, given time
         fetchMessages();
-        const messageUpdate = setInterval(fetchMessages, THIRTY_SECONDS_MS);
+        const messageUpdate = setInterval(fetchMessages, FIFTEEN_SECONDS_MS);
 
         return () => clearInterval(messageUpdate);
     }, [fetchMessages]);
