@@ -12,7 +12,6 @@ import CreateServer from "./components/Server/createserver";
 import JoinServer from "./components/Server/joinserver";
 import NewChannel from "./components/Channel/createNewChannel";
 import ListChannel from "./components/Channel/channelList";
-import ChatMessages from "./components/ChatBox/lib/components/Chat/ChatMessages";
 import Server from "./components/Server/Server";
 import axios from "axios";
 
@@ -131,7 +130,6 @@ const logOut = () => {
         <Routes>
           <Route exact path="/" element={<Home/>} />
           <Route exact path="/createserver" element={<CreateServer/>}/>
-          <Route exact path="/server-chat" element={<ChatMessages/>}/>
           <Route exact path="/joinserver" element={<JoinServer/>}/>
           <Route exact path="/login" element={<Login/>} />
           <Route exact path="/profile" element={<Profile/>} />
