@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react"; 
+import React, {useState, useEffect, useRef} from "react"; 
 import { Routes, Route, Link} from 'react-router-dom';
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
@@ -12,7 +12,8 @@ import CreateServer from "./components/Server/createserver";
 import JoinServer from "./components/Server/joinserver";
 import NewChannel from "./components/Channel/createNewChannel";
 import ListChannel from "./components/Channel/channelList";
-import ChatMessages from "./components/ChatBox/lib/components/Chat/ChatMessages";
+import Server from "./components/Server/Server";
+import axios from "axios";
 
 const App = () => {
   const [currentUser, setCurrentUser] = useState(undefined);
@@ -22,7 +23,7 @@ const App = () => {
       setCurrentUser(user);
     }
   }, []);
-  const [currentServer, setCurrentServer] =useState(undefined);
+  const [currentServer, setCurrentServer] =useState({});
   useEffect(() =>{
     const server = AuthService.getCurrentServer();
     if (server){
@@ -32,6 +33,30 @@ const App = () => {
 const logOut = () => {
   AuthService.logout();
 };
+
+  // To prevent major refactoring, ref is needed to check for changes in the DOM
+  const isFirstRender = useRef(true);
+  const [defaultChannel, setDefaultChannel] = useState("");
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+    } else {
+      const fetchDefaultChannel = async () => {
+          const token = AuthService.getCurrentUser().token;
+          const channels = await axios.get(
+              `${process.env.REACT_APP_BASE_API_URL}/channels/all/${currentServer.server._id}`,
+              {
+                  headers: {
+                      Authorization: `Bearer ${token}`,
+                  },
+              }
+          );
+          const defaultChannel = channels.data[0];
+          setDefaultChannel(defaultChannel);
+      };
+      fetchDefaultChannel();
+    }
+  }, [currentServer]);
 
   return (
     <div className="">  
@@ -56,6 +81,12 @@ const logOut = () => {
               </Link>
             </li>
             )}
+            {currentUser && currentServer && (
+                <Link to={`/channel/${defaultChannel._id}`} className="nav-link">
+                  Server
+                </Link>
+              )
+            }
             {currentUser && currentServer && (
               <li className="nav-item">
                 <Link to={"/createNewChannel"} className="nav-link">
@@ -99,7 +130,6 @@ const logOut = () => {
         <Routes>
           <Route exact path="/" element={<Home/>} />
           <Route exact path="/createserver" element={<CreateServer/>}/>
-          <Route exact path="/server-chat" element={<ChatMessages/>}/>
           <Route exact path="/joinserver" element={<JoinServer/>}/>
           <Route exact path="/login" element={<Login/>} />
           <Route exact path="/profile" element={<Profile/>} />
@@ -107,7 +137,7 @@ const logOut = () => {
           <Route exact path="/newuser" element={<RegisterForm/>}/>
           <Route exact path="/createNewChannel" element={<NewChannel/>}/>
           <Route exact path="/channelList" element={<ListChannel/>}/>
-         
+          <Route path="/channel/:channelID" element={<Server/>} />
         </Routes>
       </div>
     </div>
