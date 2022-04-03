@@ -12,7 +12,7 @@ const logger = winston.createLogger({
   transports: [new winston.transports.Console()],
 });
 
-const { MONGODB_URI } = process.env;
+const { MONGODB_URI } = process.env.NODE_ENV === "test" ? "": process.env;
 
 mongoose.connect(MONGODB_URI).catch((error) => {
   logger.log({
@@ -59,9 +59,14 @@ app.use('/api/messages/', require('./routes/api/messages'));
 
 const PORT = process.env.PORT;
 
-app.listen(PORT, () => {
-  logger.log({
-    message: `Listening on port ${PORT}`,
-    level: 'info',
+if(process.env.NODE_ENV !== "test"){
+    app.listen(PORT, () => {
+    logger.log({
+      message: `Listening on port ${PORT}`,
+      level: 'info',
+    });
   });
-});
+}
+
+
+module.exports = app;
