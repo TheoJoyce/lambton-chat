@@ -8,9 +8,10 @@ const User = require("../models/User");
 const Server = require("../models/Server");
 
 let token;
-let savedServer;
+//let savedServer;
 const baseServer = {
-    name: "testServerName"
+    name: "testServerName",
+    code: "1789456123"
 };
 
 const baseUser = {
@@ -31,13 +32,6 @@ beforeAll(async () => {
         process.env.JWT_SECRET
         );
     }); 
-    const serverToSave = new Server(baseServer);
-    serverToSave.save((err, server) => {
-        savedServer = {
-            ...baseServer,
-            code: "1789456123"
-        }
-    });
 });
 
 beforeAll(async () => await db.connect());
@@ -51,8 +45,8 @@ afterAll(async () => await db.close());
 //@access Private
 describe("GET /:id", () => {
     test("it should get the id of the server and return 200", async () => {
-        //const validServer = new Server(baseServer);
-        //const savedServer = await validServer.save();
+        const validServer = new Server(baseServer);
+        const savedServer = await validServer.save();
         
         return request(app)
             .get(`/api/servers/${savedServer._id}`)
@@ -67,36 +61,15 @@ describe("GET /:id", () => {
 //@access Private
 describe("GET /code/:code", () => {
     test("it should get the server by join code and return 200", async () => {
-        //const validServer = new Server(baseServer);
-        //const savedServer = await validServer.save();
+        const validServer = new Server(baseServer);
+        const savedServer = await validServer.save();
         
         return request(app)
             .get(`/api/servers/code/${savedServer.code}`)
             .set('Authorization', `Bearer ${token}`)
-            .send({...baseServer})
+            //.send({...savedServer})
             .then((response) => {
                 expect(response.statusCode).toBe(200);
-        });
-    });
-});
-
-//------------------------------------------------------------------
-//test the POST routes
-//------------------------------------------------------------------
-
-//test @route POST /api/servers/create
-//@access Private
-describe("POST /create ...when passed a name", () => {
-    test("it should respond with 201 status code", async () => {
-        //const validServer = new Server(baseServer);
-        //const savedServer = await validServer.save();
-
-        return request(app)
-            .get("/api/servers/create")
-            .set('Authorization', `Bearer ${token}`)
-            .send({...baseServer})
-            .then((response) => {
-                expect(response.statusCode).toBe(201);
         });
     });
 });

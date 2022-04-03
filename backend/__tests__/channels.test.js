@@ -3,7 +3,6 @@ const app = require("../server");
 const request = require('supertest');
 const jwt = require("jsonwebtoken");
 const db = require("./config/database");
-const agent = request.agent(app);
 const Channel = require("../models/Channel");
 const User = require("../models/User");
 const Server = require("../models/Server");
@@ -76,27 +75,6 @@ describe("GET /all/:serverID", () => {
             .set('Authorization', `Bearer ${token}`)
             .then((response) => {
                 expect(response.statusCode).toBe(200);
-        });
-    });
-});
-
-//------------------------------------------------------------------
-//test the POST routes
-//------------------------------------------------------------------
-
-//test @route POST /api/channels/create
-//@access Private
-describe("POST /create ...when passed a channel name", () => {
-    test("it should respond with 201 status code", async () => {
-        const channelToSave = new Channel(baseChannel);
-        const savedChannel = await channelToSave.save();
-        return request(app)
-        .post("/api/channels/create")
-        .set('Authorization', `Bearer ${token}`)
-        .send({token})
-        .send({...baseChannel})
-        .then((response) => {
-            expect(response.statusCode).toBe(201);
         });
     });
 });
