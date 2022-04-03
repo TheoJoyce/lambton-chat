@@ -4,9 +4,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import AuthService from "./services/auth.service";
 import Login from "./components/Login/login.component";
-import Home from "./components/Home/home.component";
-import Profile from "./components/profile.component";
-import User from "./components/user.component";
 import RegisterForm from "./components/Home/RegisterForm";
 import CreateServer from "./components/Server/createserver";
 import JoinServer from "./components/Server/joinserver";
@@ -61,12 +58,7 @@ const logOut = () => {
   return (
     <div className="">  
           <nav className="navbar navbar-expand navbar-dark bg-dark">
-          <div className="navbar-nav mr-auto">
-            <li className="nav-item">
-              <Link to={"/home"} className="nav-link">
-                Home
-              </Link>
-            </li>           
+          <div className="navbar-nav mr-auto">          
             {currentUser && (
               <li className="nav-item">
                 <Link to={"/createserver"} className="nav-link">
@@ -91,13 +83,6 @@ const logOut = () => {
               <li className="nav-item">
                 <Link to={"/createNewChannel"} className="nav-link">
                   Create Channel
-                </Link>
-              </li>
-            )}
-             {currentUser && currentServer && (
-              <li className="nav-item">
-                <Link to={"/channelList"} className="nav-link">
-                  Channels
                 </Link>
               </li>
             )}
@@ -128,12 +113,9 @@ const logOut = () => {
         </nav>
       <div>
         <Routes>
-          <Route exact path="/" element={<Home/>} />
           <Route exact path="/createserver" element={<CreateServer/>}/>
           <Route exact path="/joinserver" element={<JoinServer/>}/>
           <Route exact path="/login" element={<Login/>} />
-          <Route exact path="/profile" element={<Profile/>} />
-          <Route exact path="/user" element={<User/>} />
           <Route exact path="/newuser" element={<RegisterForm/>}/>
           <Route exact path="/createNewChannel" element={<NewChannel/>}/>
           <Route exact path="/channelList" element={<ListChannel/>}/>

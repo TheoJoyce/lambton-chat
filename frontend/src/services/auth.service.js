@@ -60,6 +60,11 @@ class AuthService {
     const admin = id.server.admin;
     return axios
       .post(API_URL + "channels/create", {name, serverID, admin}, { headers: {"Authorization": `Bearer ${token}`} })
+      .then(res =>{
+        console.log(res.data.channel._id);
+        const x = res.data.channel._id;
+        return x;
+      })
   }
   //view channels 
   viewChannel(token = JSON.parse(localStorage.getItem('user'))){
