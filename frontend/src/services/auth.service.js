@@ -1,4 +1,5 @@
 import axios from "axios";
+import { createRoutesFromChildren } from "react-router-dom";
 const API_URL = `${process.env.REACT_APP_BASE_API_URL}/`
 
 class AuthService {
@@ -65,15 +66,22 @@ class AuthService {
     token = token.token;
     const id = JSON.parse(localStorage.getItem("server"));
     const serverID = id.server._id;
-    console.log (serverID);
+    const channel = [];
     axios
       .get(API_URL + "channels/all/" + serverID, { headers: {"Authorization": `Bearer ${token}`} })
       .then (res => {
-        localStorage.removeItem('channels');
-        localStorage.setItem('channels', JSON.stringify(res.data));
+        const c = JSON.parse(JSON.stringify(res.data));
+        var n = 0;
+        for (let x = c.length; x >= 0; x--){
+          const test = c[n];
+          if (test !== undefined){
+            if(test.server == serverID){
+              channel.push(c[n]);
+            }}
+          n ++;
+        }
       })
-      console.log (JSON.parse(localStorage.getItem('channels')));
-      return JSON.parse(localStorage.getItem('channels'));
+      return channel;
   }
 }
 export default new AuthService();
