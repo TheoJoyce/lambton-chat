@@ -1,9 +1,10 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 import AuthService from "../../services/auth.service";
 import { useNavigate } from "react-router-dom";
+import authService from "../../services/auth.service";
 const required = (value) => {
   if (!value) {
     return (
@@ -21,6 +22,7 @@ const CreateNewChannel = (props) => {
   const [name, setName] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+
   const onChangeName = (e) => {
     const name = e.target.value;
     setName(name);
@@ -34,6 +36,7 @@ const CreateNewChannel = (props) => {
     if (checkBtn.current.context._errors.length === 0) {
       AuthService.createChannel(name).then(
         () => {
+          
           navigate('/channelList');
           window.location.reload();
         },
