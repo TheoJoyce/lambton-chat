@@ -62,6 +62,8 @@ const register = (req, res) => {
 
   if (errors.isEmpty()) {
     const { email, password, firstName, lastName } = req.body;
+    const title = req.body.title || undefined;
+
     User.exists({ email }, (err, exists) => {
       if (exists) {
         res.status(400).json({
@@ -74,11 +76,16 @@ const register = (req, res) => {
               errors: makeError('password', 'Error hashing password'),
             });
           } else {
-            const user = new User({
+            const commonUser = {
               email,
-              password: hash,
               firstName,
               lastName,
+              title,
+            };
+
+            const user = new User({
+              password: hash,
+              ...commonUser,
             });
 
             user.save((err, user) => {
@@ -91,9 +98,7 @@ const register = (req, res) => {
                   msg: 'User created',
                   user: {
                     id: user._id,
-                    firstName,
-                    lastName,
-                    email,
+                    ...commonUser,
                   },
                 });
               }

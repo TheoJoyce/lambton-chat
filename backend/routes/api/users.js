@@ -58,17 +58,21 @@ router.post(
     check('password')
       .trim()
       .isLength({ min: 8 })
-      .withMessage('Password must be at least 8 characters long'),
+      .withMessage('Password must be at least 8 characters long')
+      .escape(),
     check('firstName')
       .trim()
       .not()
       .isEmpty()
-      .withMessage('First name is required'),
+      .withMessage('First name is required')
+      .escape(),
     check('lastName')
       .trim()
       .not()
       .isEmpty()
-      .withMessage('Last name is required'),
+      .withMessage('Last name is required')
+      .escape(),
+    check('title').optional().trim().isLength({ max: 40 }).escape(),
   ],
   userController.register,
 );
