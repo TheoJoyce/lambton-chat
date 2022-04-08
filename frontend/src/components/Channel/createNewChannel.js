@@ -4,7 +4,9 @@ import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 import AuthService from "../../services/auth.service";
 import { useNavigate } from "react-router-dom";
-import authService from "../../services/auth.service";
+
+import { getErrorStringArray } from "../../helpers/getErrorStringArray";
+
 const required = (value) => {
   if (!value) {
     return (
@@ -40,14 +42,9 @@ const CreateNewChannel = (props) => {
           window.location.reload();
         },
         (error) => {
-          const resMessage =
-            (error.response &&
-              error.response.data &&
-              error.response.data.message) ||
-            error.message ||
-            error.toString();
           setLoading(false);
-          setMessage(resMessage);
+          const { errors } = error.response.data;
+          setMessage(getErrorStringArray(errors).toString());
         }
       );
     } else {
