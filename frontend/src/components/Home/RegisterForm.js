@@ -5,6 +5,9 @@ import CheckButton from "react-validation/build/button";
 import { isEmail } from "validator";
 import { useNavigate } from "react-router-dom";
 import AuthService from "../../services/auth.service";
+
+import { getErrorStringArray } from "../../helpers/getErrorStringArray";
+
 const required = (value) => {
   if (!value) {
     return (
@@ -105,13 +108,8 @@ const Register = (props) => {
           navigate("/login");
         },
         (error) => {
-          const resMessage =
-            (error.response &&
-              error.response.data &&
-              error.response.data.message) ||
-            error.message ||
-            error.toString();
-          setMessage(resMessage);
+          const { errors } = error.response.data;
+          setMessage(getErrorStringArray(errors).toString());
           setSuccessful(false);
         }
       );
