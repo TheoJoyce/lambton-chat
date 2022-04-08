@@ -114,6 +114,27 @@ const register = (req, res) => {
   }
 };
 
+const createJWT = (user) => {
+  const { _id, firstName, lastName, email, title, server } = user;
+
+  const token = jwt.sign(
+    {
+      id: _id,
+      firstName,
+      lastName,
+      email,
+      title,
+      server,
+    },
+    process.env.JWT_SECRET,
+    {
+      expiresIn: '7d',
+    },
+  );
+
+  return token;
+};
+
 const login = (req, res) => {
   const errors = validationResult(req);
 
@@ -129,22 +150,7 @@ const login = (req, res) => {
         } else {
           bcrypt.compare(password, user.password).then((isMatch) => {
             if (isMatch) {
-              const { _id, firstName, lastName, email, title, server } = user;
-
-              const token = jwt.sign(
-                {
-                  id: _id,
-                  firstName,
-                  lastName,
-                  email,
-                  title,
-                  server,
-                },
-                process.env.JWT_SECRET,
-                {
-                  expiresIn: '7d',
-                },
-              );
+              const token = createJWT(user);
 
               res.status(200).json({ token, msg: 'Logged in' });
             } else {
@@ -216,7 +222,9 @@ const updateUser = (req, res) => {
           });
         }
 
-        return res.status(200).json(user);
+        return res
+          .status(200)
+          .json({ user, token: createJWT({ ...user._doc, server }) });
       })
       .catch((err) => {
         return res.status(500).json(err);

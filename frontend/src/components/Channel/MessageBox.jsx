@@ -1,10 +1,19 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 import AuthService from "../../services/auth.service";
 
 const MessageBox = ({ channelID, channelName, messageCallback }) => {
     const [messageText, setMessageText] = useState("");
+    const [server, setServer] = useState(null);
+
+    useEffect(() => {
+        const fetchServer = async () => {
+            const server = await AuthService.getCurrentServer();
+            setServer(server);
+        };
+        fetchServer();
+    }, [])
 
     const handleChange = (e) => {
         setMessageText(e.target.value);
@@ -17,7 +26,7 @@ const MessageBox = ({ channelID, channelName, messageCallback }) => {
                 `${process.env.REACT_APP_BASE_API_URL}/messages/create`,
                 {
                     text: messageText,
-                    serverID: AuthService.getCurrentServer().server._id,
+                    serverID: server._id,
                     channelID,
                 },
                 {

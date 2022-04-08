@@ -29,8 +29,11 @@ const Server = () => {
         };
         fetchUser();
 
-        const server = AuthService.getCurrentServer().server;
-        setServer(server);
+        const fetchServer = async () => {
+            const server = await AuthService.getCurrentServer();
+            setServer(server);
+        }
+        fetchServer();
 
         const fetchChannel = async () => {
             const response = await axios.get(

@@ -8,10 +8,13 @@ import 'react-pro-sidebar/dist/css/styles.css';
 const ListChannel = () => {
     const [channels, setChannel] = useState([]);
     useEffect(() => {
-      const channel = AuthService.viewChannel();
-      if (channel) {
-        setChannel(channel);
+      const fetchChannelList = async () => {
+        const channels = await AuthService.viewChannel();
+        if (channels) {
+          setChannel(channels);
+        }
       }
+      fetchChannelList();
     }, []);
     return(
         <ProSidebar>

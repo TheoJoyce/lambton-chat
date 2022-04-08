@@ -22,7 +22,7 @@ const userSchema = new mongoose.Schema(
         type: String,
         required: "Password is required!",
     },
-    serverID: {
+    server: {
         type: Schema.Types.ObjectId, ref: 'Server'
     }
   },

@@ -35,9 +35,8 @@ const CreateNewChannel = (props) => {
     form.current.validateAll();
     if (checkBtn.current.context._errors.length === 0) {
       AuthService.createChannel(name).then(
-        () => {
-          
-          navigate('/channelList');
+        (channelID) => {
+          navigate(`/channel/${channelID}`);
           window.location.reload();
         },
         (error) => {

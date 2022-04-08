@@ -14,7 +14,7 @@ const required = (value) => {
   }
 };
 
-const Code = (props) => {
+const Code = ({updateUserState}) => {
   const navigate = useNavigate();
   const form = useRef();
   const checkBtn = useRef();
@@ -31,10 +31,11 @@ const Code = (props) => {
     setMessage("");
     setLoading(true);
     form.current.validateAll();
+    
     if (checkBtn.current.context._errors.length === 0) {
       AuthService.joinServer(code).then(
         () => {
-          navigate('/home');
+          navigate('/');
           window.location.reload();
         },
         (error) => {

@@ -14,7 +14,7 @@ const required = (value) => {
   }
 };
 
-const Create = (props) => {
+const Create = ({updateUserState}) => {
   const navigate = useNavigate();
   const form = useRef();
   const checkBtn = useRef();
@@ -35,6 +35,8 @@ const Create = (props) => {
       AuthService.createServer(name).then(
         () => {
           navigate('/createNewChannel');
+          updateUserState(AuthService.getCurrentUser());
+          window.location.reload();
         },
         (error) => {
           const resMessage =

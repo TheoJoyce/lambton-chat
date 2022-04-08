@@ -15,6 +15,7 @@ class AuthService {
   }
   logout() {
     localStorage.removeItem("user");
+    localStorage.removeItem("server");
   }
   register(firstName,lastName,title, email, password) {
     return axios.post(API_URL + "users/auth/register", {
@@ -28,36 +29,40 @@ class AuthService {
   getCurrentUser() {
     return JSON.parse(localStorage.getItem('user'));
   }
-  createServer(name, token = JSON.parse(localStorage.getItem('user'))){
+
+  async createServer(name, token = JSON.parse(localStorage.getItem('user'))){
     token = token.token;
-    return axios
-      .post(API_URL + "servers/create", {name}, { headers: {"Authorization": `Bearer ${token}`} })
-      .then(res => {
-        localStorage.setItem("server", JSON.stringify(res.data));
-        const serverId = JSON.parse(localStorage.getItem('server'));
-        const id = serverId.server._id;
-        axios.post(API_URL + "users/update", {id} ,{ headers: {"Authorization": `Bearer ${token}`} });
-      })
+    const res = await axios
+      .post(API_URL + "servers/create", { name }, { headers: { "Authorization": `Bearer ${token}` } });
+    const serverID = res.data.server._id;
+    const userRes = await axios.post(API_URL + "users/update", { serverID }, { headers: { "Authorization": `Bearer ${token}` } });
+    localStorage.setItem("user", JSON.stringify({msg: "Logged in!", token: userRes.data.token}));
   }
-  joinServer(joinCode, token = JSON.parse(localStorage.getItem('user'))){
+  async joinServer(joinCode, token = JSON.parse(localStorage.getItem('user'))){
     token = token.token;
-    return axios.get(API_URL + "servers/code/" + joinCode, { headers: {"Authorization": `Bearer ${token}`} })
-    .then (res =>{
-      const serverId = res.data._id;
-      localStorage.removeItem("server");
-      localStorage.setItem("server", JSON.stringify(res.data));
-      axios.post(API_URL + "users/update", {serverId} ,{ headers: {"Authorization": `Bearer ${token}`} });
-    })
+    const res = await axios.get(API_URL + "servers/code/" + joinCode, { headers: { "Authorization": `Bearer ${token}` } });
+    const serverID = res.data._id;
+    const userRes = await axios.post(API_URL + "users/update", { serverID }, { headers: { "Authorization": `Bearer ${token}` } });
+    localStorage.setItem("user", JSON.stringify({msg: "Logged in!", token: userRes.data.token}));
   }
-  getCurrentServer() {
-    return JSON.parse(localStorage.getItem('server'));
+  async getCurrentServer() {
+    const { token } = JSON.parse(localStorage.getItem("user"));
+    const userRes = await axios.post(`${process.env.REACT_APP_BASE_API_URL}/users/auth/verify`, {token});
+    const { user } = userRes.data;
+
+    // Return null if there is no server assigned to the user
+    if (!user.server) return null;
+    
+    const serverRes = await axios.get(`${process.env.REACT_APP_BASE_API_URL}/servers/${user.server}`, {headers: {"Authorization": `Bearer ${token}`}});
+    const server = serverRes.data;
+
+    return server;
   }
   //creating the channel
-  createChannel(name, token = JSON.parse(localStorage.getItem('user'))){
+  async createChannel(name, token = JSON.parse(localStorage.getItem('user'))){
     token = token.token;
-    const id = JSON.parse(localStorage.getItem("server"));
-    const serverID = id.server._id;
-    const admin = id.server.admin;
+    const server = await this.getCurrentServer();
+    const {admin, _id: serverID} = server;
     return axios
       .post(API_URL + "channels/create", {name, serverID, admin}, { headers: {"Authorization": `Bearer ${token}`} })
       .then(res =>{
@@ -67,26 +72,15 @@ class AuthService {
       })
   }
   //view channels 
-  viewChannel(token = JSON.parse(localStorage.getItem('user'))){
+  async viewChannel(token = JSON.parse(localStorage.getItem('user'))){
     token = token.token;
-    const id = JSON.parse(localStorage.getItem("server"));
-    const serverID = id.server._id;
-    const channel = [];
-    axios
-      .get(API_URL + "channels/all/" + serverID, { headers: {"Authorization": `Bearer ${token}`} })
-      .then (res => {
-        const c = JSON.parse(JSON.stringify(res.data));
-        var n = 0;
-        for (let x = c.length; x >= 0; x--){
-          const test = c[n];
-          if (test !== undefined){
-            if(test.server == serverID){
-              channel.push(c[n]);
-            }}
-          n ++;
-        }
-      })
-      return channel;
+    const server = await this.getCurrentServer();
+    const serverID = server._id;
+    
+    const channelsRes = await axios.get(API_URL + "channels/all/" + serverID, { headers: {"Authorization": `Bearer ${token}`} });
+    const channels = channelsRes.data || [];
+    
+    return channels;
   }
 }
 export default new AuthService();
