@@ -34,9 +34,9 @@ const getChannelsByServerID = (req, res) => {
   const errors = validationResult(req);
 
   if (errors.isEmpty()) {
-    const { id } = req.params;
+    const { serverID } = req.params;
 
-    Channel.find({ serverID: id }).then((channels) => {
+    Channel.find({ server: serverID }).then((channels) => {
       if (channels) {
         res.status(200).send(channels);
       } else {

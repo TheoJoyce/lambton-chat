@@ -3,6 +3,7 @@ import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 import { isEmail } from "validator";
+import { useNavigate } from "react-router-dom";
 import AuthService from "../../services/auth.service";
 const required = (value) => {
   if (!value) {
@@ -69,6 +70,8 @@ const Register = (props) => {
   const [successful, setSuccessful] = useState(false);
   const [message, setMessage] = useState("");
 
+  const navigate = useNavigate();
+
   const onChangeFirstname = (e) => {
     const firstname = e.target.value;
     setFirstname(firstname);
@@ -99,6 +102,7 @@ const Register = (props) => {
         (response) => {
           setMessage(response.data.message);
           setSuccessful(true);
+          navigate("/login");
         },
         (error) => {
           const resMessage =
